@@ -15,6 +15,17 @@ const addNewPost = async (req, res) => {
     }
 };
 
+const getUserPosts = async (req, res) => {
+    const { _id } = req.author;
+    console.log(_id);
+    try {
+        const posts = await Post.find({ author: _id });
+        res.status(200).json({ success: true, posts });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const getAllPosts = async (_, res) => {
     try {
         const posts = await Post.find({});
@@ -68,4 +79,4 @@ const updatePost = async (req, res) => {
     }
 };
 
-export { addNewPost, getAllPosts, deletePost, updatePost };
+export { addNewPost, getAllPosts, getUserPosts, deletePost, updatePost };

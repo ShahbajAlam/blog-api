@@ -3,6 +3,7 @@ import {
     addNewPost,
     deletePost,
     getAllPosts,
+    getUserPosts,
     updatePost,
 } from "../controllers/postControllers.js";
 import { auth } from "../middlewares/auth.js";
@@ -28,5 +29,10 @@ router.delete("/:id", auth, deletePost);
 // PATCH request
 // api/posts/:id
 router.patch("/:id", auth, updatePost);
+
+// Get an user posts
+// GET request
+// api/posts/user
+router.get("/myposts", auth, getUserPosts);
 
 export { router as postRoutes };
