@@ -12,8 +12,8 @@ const createToken = (id) => {
 };
 
 const signup = async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password)
+    const { username, email, password } = req.body;
+    if (!username || !email || !password)
         return res.status(400).json({ error: "All fields are required" });
 
     const hashedPassword = await hash(password, 10);
@@ -22,9 +22,13 @@ const signup = async (req, res) => {
         return res.status(400).json({ error: "You are already registered" });
 
     try {
-        const user = await User.create({ email, password: hashedPassword });
+        const user = await User.create({
+            username,
+            email,
+            password: hashedPassword,
+        });
         const token = createToken(user._id);
-        res.status(200).json({ success: "Registered successfully", token });
+        res.status(201).json({ success: true, token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -45,7 +49,7 @@ const login = async (req, res) => {
             return res.status(400).json({ error: "Wrong password" });
 
         const token = createToken(user._id);
-        res.status(200).json({ success: "Logged in successfully", token });
+        res.status(200).json({ success: true, token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

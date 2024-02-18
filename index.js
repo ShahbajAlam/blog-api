@@ -1,6 +1,6 @@
-import express from "express";
 import cors from "cors";
 import "dotenv/config.js";
+import express from "express";
 import mongoose from "mongoose";
 
 import { postRoutes } from "./routes/postRoutes.js";
@@ -15,6 +15,7 @@ app.use(
     })
 );
 app.use(express.json());
+
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 

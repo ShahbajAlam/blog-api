@@ -2,14 +2,19 @@ import { Post } from "../models/postModels.js";
 
 const addNewPost = async (req, res) => {
     const { title, body } = req.body;
-    const { _id } = req.author;
+    const { _id, username } = req.author;
 
     if (!title || !body)
         return res.status(400).json({ error: "All fields are required" });
 
     try {
-        const post = await Post.create({ title, body, author: _id });
-        return res.status(200).json({ success: true, post });
+        const post = await Post.create({
+            title,
+            body,
+            authorID: _id,
+            author: username,
+        });
+        res.status(201).json({ success: true, post });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -17,9 +22,8 @@ const addNewPost = async (req, res) => {
 
 const getUserPosts = async (req, res) => {
     const { _id } = req.author;
-    console.log(_id);
     try {
-        const posts = await Post.find({ author: _id });
+        const posts = await Post.find({ authorID: _id });
         res.status(200).json({ success: true, posts });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -42,9 +46,10 @@ const getAllPosts = async (_, res) => {
 const deletePost = async (req, res) => {
     const { id } = req.params;
     const { _id } = req.author;
+
     try {
         const document = await Post.findById(id);
-        if (!document.author.equals(_id)) {
+        if (!document.authorID.equals(_id)) {
             return res
                 .status(401)
                 .json({ error: "You can not delete this post" });
@@ -66,7 +71,7 @@ const updatePost = async (req, res) => {
 
     try {
         const post = await Post.findById(id);
-        if (!post.author.equals(_id)) {
+        if (!post.authorID.equals(_id)) {
             return res
                 .status(401)
                 .json({ error: "You can not update this post" });

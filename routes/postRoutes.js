@@ -32,7 +32,7 @@ router.patch("/:id", auth, updatePost);
 
 // Get an user posts
 // GET request
-// api/posts/user
+// api/posts/myposts
 router.get("/myposts", auth, getUserPosts);
 
 export { router as postRoutes };
